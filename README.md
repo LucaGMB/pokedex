@@ -74,6 +74,10 @@ Cada card adopta el color oficial del tipo primario del pokémon:
 | Dark | `#705848` | Steel | `#B8B8D0` |
 | Fairy | `#EE99AC` | Normal | `#A8A878` |
 
+## Nota
+
+Este proyecto fue desarrollado como entrega para un curso obligatorio que tuve que realizar. La consigna requería interactuar con herramientas de IA para mejorar prompts de desarrollo. A fines prácticos y como ejercicio de automatización, todo el contenido de este repositorio (código y textos explicativos) fue generado 100% mediante modelos de lenguaje (LLMs), limitando mi intervención a la orquestación de la herramienta.
+
 ## Licencia
 
 MIT
