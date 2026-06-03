@@ -78,6 +78,7 @@ export function usePokemonDetail(id) {
               hidden: a.is_hidden,
             })),
             stats: pokemon.stats.map((s) => ({
+              key: s.stat.name,
               name: STAT_NAMES[s.stat.name] || s.stat.name,
               value: s.base_stat,
             })),

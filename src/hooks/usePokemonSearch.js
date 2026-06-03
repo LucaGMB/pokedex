@@ -70,7 +70,14 @@ export function usePokemonSearch(query, typeFilter) {
       dispatch({ type: 'start' });
       try {
         const pool = typeFilter ? await getTypeNames(typeFilter) : await getAllNames();
-        const matches = pool.filter((p) => p.name.includes(q));
+        const isNumber = /^\d+$/.test(q);
+        const matches = pool.filter((p) => {
+          if (isNumber) {
+            const idStr = p.url.match(/\/(\d+)\/?$/)?.[1] ?? '';
+            return idStr.startsWith(q);
+          }
+          return p.name.includes(q);
+        });
         const slice = matches.slice(0, MAX_RESULTS);
         const results = await Promise.all(slice.map((p) => fetchDetail(p.url)));
         if (!cancelled) dispatch({ type: 'success', results, total: matches.length });

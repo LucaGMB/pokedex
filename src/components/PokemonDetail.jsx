@@ -10,6 +10,16 @@ const TYPE_COLORS = {
   fairy: '#EE99AC', normal: '#A8A878',
 };
 
+// Absolute maximums sourced from PokéAPI data
+const STAT_MAX = {
+  hp: 255,           // Blissey / Eternatus-Eternamax
+  attack: 190,       // Mewtwo-Mega-X
+  defense: 250,      // Eternatus-Eternamax
+  'special-attack': 194, // Mewtwo-Mega-Y
+  'special-defense': 250, // Eternatus-Eternamax
+  speed: 200,        // Regieleki
+};
+
 function statColor(value) {
   if (value >= 110) return '#22c55e';
   if (value >= 80) return '#84cc16';
@@ -25,8 +35,9 @@ function TypeBadge({ type }) {
   );
 }
 
-function StatBar({ name, value }) {
-  const pct = Math.round((value / 255) * 100);
+function StatBar({ statKey, name, value }) {
+  const max = STAT_MAX[statKey] ?? 255;
+  const pct = Math.min(Math.round((value / max) * 100), 100);
   return (
     <div className={styles.statRow}>
       <span className={styles.statName}>{name}</span>
@@ -141,7 +152,7 @@ export function PokemonDetail({ id, isFavorite, onToggleFavorite, onClose }) {
                 <h3 className={styles.sectionTitle}>Estadísticas base</h3>
                 <div className={styles.stats}>
                   {data.stats.map((s) => (
-                    <StatBar key={s.name} name={s.name} value={s.value} />
+                    <StatBar key={s.name} statKey={s.key} name={s.name} value={s.value} />
                   ))}
                   <div className={`${styles.statRow} ${styles.statTotalRow}`}>
                     <span className={styles.statTotalLabel}>Total</span>
