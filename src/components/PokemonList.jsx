@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { PokemonCard } from './PokemonCard';
 import styles from './PokemonList.module.css';
 
@@ -19,7 +20,19 @@ export function PokemonList({
   favorites,
   onToggleFavorite,
 }) {
-  const filtered = pokemon;
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasMore || loading || !sentinelRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) onLoadMore();
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading, onLoadMore]);
 
   if (error && pokemon.length === 0) {
     return (
@@ -35,7 +48,7 @@ export function PokemonList({
   return (
     <div>
       <div className={styles.grid}>
-        {filtered.map((p) => (
+        {pokemon.map((p) => (
           <PokemonCard
             key={p.id}
             pokemon={p}
@@ -46,11 +59,13 @@ export function PokemonList({
         {loading && pokemon.length === 0 &&
           Array.from({ length: 20 }).map((_, i) => <SkeletonCard key={i} />)}
       </div>
+
       {loading && pokemon.length > 0 && (
         <div className={styles.loadingMore}>
           <Spinner />
         </div>
       )}
+
       {error && pokemon.length > 0 && (
         <div className={styles.errorBox}>
           <p className={styles.errorMsg}>⚠ {error}</p>
@@ -59,14 +74,10 @@ export function PokemonList({
           </button>
         </div>
       )}
-      {!loading && !error && hasMore && (
-        <div className={styles.loadMoreWrapper}>
-          <button className={styles.loadMoreBtn} onClick={onLoadMore}>
-            Cargar más
-          </button>
-        </div>
-      )}
-      {!loading && filtered.length === 0 && !error && (
+
+      {!loading && !error && hasMore && <div ref={sentinelRef} className={styles.sentinel} />}
+
+      {!loading && pokemon.length === 0 && !error && (
         <p className={styles.empty}>No se encontraron pokémon.</p>
       )}
     </div>

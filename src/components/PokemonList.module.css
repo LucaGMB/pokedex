@@ -42,27 +42,8 @@
   padding: 24px 0;
 }
 
-.loadMoreWrapper {
-  display: flex;
-  justify-content: center;
-  padding: 32px 0;
-}
-
-.loadMoreBtn {
-  padding: 12px 36px;
-  background: #6366f1;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-
-.loadMoreBtn:hover {
-  background: #4f46e5;
-  transform: translateY(-2px);
+.sentinel {
+  height: 1px;
 }
 
 .errorBox {

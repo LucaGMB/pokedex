@@ -1,6 +1,34 @@
 import styles from './SearchBar.module.css';
 
-export function SearchBar({ search, onSearch, typeFilter, onTypeFilter, types, resultCount, loading }) {
+const MAX_SEARCH_RESULTS = 40;
+
+export function SearchBar({
+  search,
+  onSearch,
+  typeFilter,
+  onTypeFilter,
+  types,
+  resultCount,
+  loading,
+  isSearching,
+  searchTotal,
+}) {
+  let countText = '';
+  if (!loading) {
+    if (isSearching) {
+      if (searchTotal === 0) {
+        countText = 'Sin resultados';
+      } else if (searchTotal > MAX_SEARCH_RESULTS) {
+        countText = `Mostrando 40 de ${searchTotal} coincidencias`;
+      } else {
+        countText = searchTotal === 1 ? '1 resultado' : `${searchTotal} resultados`;
+      }
+    } else {
+      countText = resultCount === 1 ? '1 pokémon cargado' : `${resultCount} pokémon cargados`;
+    }
+    if (typeFilter) countText += ` · tipo: ${typeFilter}`;
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.controls}>
@@ -12,7 +40,7 @@ export function SearchBar({ search, onSearch, typeFilter, onTypeFilter, types, r
           <input
             className={styles.input}
             type="text"
-            placeholder="Buscar pokémon..."
+            placeholder="Buscar en toda la Pokédex..."
             value={search}
             onChange={(e) => onSearch(e.target.value)}
           />
@@ -39,15 +67,7 @@ export function SearchBar({ search, onSearch, typeFilter, onTypeFilter, types, r
           ))}
         </select>
       </div>
-      {!loading && (
-        <p className={styles.count}>
-          {resultCount === 1
-            ? '1 pokémon encontrado'
-            : `${resultCount} pokémon encontrados`}
-          {typeFilter && ` · tipo: ${typeFilter}`}
-          {search && ` · "${search}"`}
-        </p>
-      )}
+      {countText && <p className={styles.count}>{countText}</p>}
     </div>
   );
 }

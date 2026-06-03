@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { SearchBar } from './components/SearchBar';
 import { PokemonList } from './components/PokemonList';
 import { FavoritesList } from './components/FavoritesList';
 import { useFavorites } from './hooks/useFavorites';
 import { usePokemonList } from './hooks/usePokemonList';
+import { usePokemonSearch } from './hooks/usePokemonSearch';
 import { useTypes } from './hooks/useTypes';
 import styles from './App.module.css';
 
@@ -13,19 +14,38 @@ export default function App() {
   const [typeFilter, setTypeFilter] = useState('');
 
   const { favorites, toggleFavorite } = useFavorites();
-  const { pokemon, loading, error, hasMore, loadMore, retry } = usePokemonList(typeFilter);
   const { types } = useTypes();
+
+  const isSearching = search.trim().length > 0;
+
+  const {
+    pokemon: listPokemon,
+    loading: listLoading,
+    error: listError,
+    hasMore,
+    loadMore,
+    retry: listRetry,
+  } = usePokemonList(isSearching ? null : typeFilter);
+
+  const {
+    results: searchResults,
+    loading: searchLoading,
+    error: searchError,
+    total: searchTotal,
+  } = usePokemonSearch(search, typeFilter);
+
+  const displayPokemon = isSearching ? searchResults : listPokemon;
+  const displayLoading = isSearching ? searchLoading : listLoading;
+  const displayError = isSearching ? searchError : listError;
+  const displayHasMore = isSearching ? false : hasMore;
+  const displayRetry = isSearching ? () => {} : listRetry;
+
+  const resultCount = isSearching ? searchTotal : displayPokemon.length;
 
   const handleTypeFilter = (type) => {
     setSearch('');
     setTypeFilter(type);
   };
-
-  const filtered = useMemo(() => {
-    if (!search.trim()) return pokemon;
-    const q = search.toLowerCase();
-    return pokemon.filter((p) => p.name.toLowerCase().includes(q));
-  }, [pokemon, search]);
 
   return (
     <div className={styles.app}>
@@ -64,16 +84,18 @@ export default function App() {
               typeFilter={typeFilter}
               onTypeFilter={handleTypeFilter}
               types={types}
-              resultCount={filtered.length}
-              loading={loading}
+              resultCount={resultCount}
+              loading={displayLoading}
+              isSearching={isSearching}
+              searchTotal={searchTotal}
             />
             <PokemonList
-              pokemon={filtered}
-              loading={loading}
-              error={error}
-              hasMore={hasMore && !search.trim()}
+              pokemon={displayPokemon}
+              loading={displayLoading}
+              error={displayError}
+              hasMore={displayHasMore}
               onLoadMore={loadMore}
-              onRetry={retry}
+              onRetry={displayRetry}
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
             />
