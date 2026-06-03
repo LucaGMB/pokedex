@@ -222,9 +222,25 @@
   text-align: right;
 }
 
-.statTotal {
+.statTotalRow {
+  grid-template-columns: 72px 36px 1fr;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 8px;
+  margin-top: 2px;
+}
+
+.statTotalLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
   color: #1e293b;
+  text-align: right;
+}
+
+.statTotalValue {
+  font-size: 0.95rem;
   font-weight: 800;
+  color: #1e293b;
+  text-align: right;
 }
 
 .barTrack {

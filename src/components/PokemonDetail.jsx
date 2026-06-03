@@ -143,12 +143,11 @@ export function PokemonDetail({ id, isFavorite, onToggleFavorite, onClose }) {
                   {data.stats.map((s) => (
                     <StatBar key={s.name} name={s.name} value={s.value} />
                   ))}
-                  <div className={styles.statRow}>
-                    <span className={`${styles.statName} ${styles.statTotal}`}>Total</span>
-                    <span className={`${styles.statValue} ${styles.statTotal}`}>
+                  <div className={`${styles.statRow} ${styles.statTotalRow}`}>
+                    <span className={styles.statTotalLabel}>Total</span>
+                    <span className={styles.statTotalValue}>
                       {data.stats.reduce((acc, s) => acc + s.value, 0)}
                     </span>
-                    <div className={styles.barTrack} />
                   </div>
                 </div>
               </section>
