@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview --host 0.0.0.0 --port 3000"
+    "start": "serve dist -l 3000"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -24,6 +24,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "playwright": "^1.60.0",
+    "serve": "^14.2.6",
     "vite": "^8.0.12"
   }
 }
