@@ -4,8 +4,9 @@ Una Pokédex web interactiva construida con React + Vite. Consume la [PokéAPI](
 
 ## Funcionalidades
 
-- **Listado paginado** — 20 pokémon por carga, botón "Cargar más"
-- **Búsqueda en tiempo real** — filtra por nombre sobre los pokémon ya cargados
+- **Vista de detalle** — modal con artwork grande, descripción Pokédex, estadísticas base, habilidades, altura/peso y generación
+- **Listado con scroll infinito** — carga automática al llegar al final de la página
+- **Búsqueda global** — busca en toda la Pokédex (no solo los pokémon ya cargados)
 - **Filtro por tipo** — dropdown poblado desde la PokéAPI; recarga el listado al cambiar
 - **Favoritos** — marcá/desmarcá con ★; persiste en `localStorage["pokemon_favorites"]`
 - **Vista de favoritos** — sección separada con los pokémon guardados y estado vacío amigable
@@ -30,11 +31,14 @@ src/
 ├── components/
 │   ├── FavoritesList.jsx   # Vista de favoritos guardados
 │   ├── PokemonCard.jsx     # Card individual con sprite, tipos y botón ★
-│   ├── PokemonList.jsx     # Grilla con skeleton, Load More y manejo de errores
+│   ├── PokemonDetail.jsx   # Modal de detalle con stats, habilidades y descripción
+│   ├── PokemonList.jsx     # Grilla con scroll infinito y manejo de errores
 │   └── SearchBar.jsx       # Input de búsqueda + dropdown de tipo + contador
 ├── hooks/
 │   ├── useFavorites.js     # Estado de favoritos ↔ localStorage
+│   ├── usePokemonDetail.js # Fetch de pokemon + species para el modal de detalle
 │   ├── usePokemonList.js   # Fetch paginado con soporte de filtro por tipo
+│   ├── usePokemonSearch.js # Búsqueda global con caché de nombres y debounce
 │   └── useTypes.js         # Fetch de lista de tipos desde la PokéAPI
 └── App.jsx                 # Orquestación de estado global y navegación
 ```
@@ -78,6 +82,3 @@ Cada card adopta el color oficial del tipo primario del pokémon:
 
 Este proyecto fue desarrollado como entrega para un curso obligatorio que tuve que realizar. La consigna requería interactuar con herramientas de IA para mejorar prompts de desarrollo. A fines prácticos y como ejercicio de automatización, todo el contenido de este repositorio (código y textos explicativos) fue generado 100% mediante modelos de lenguaje (LLMs), limitando mi intervención a la orquestación de la herramienta.
 
-## Licencia
-
-MIT

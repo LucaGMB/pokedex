@@ -19,6 +19,7 @@ export function PokemonList({
   onRetry,
   favorites,
   onToggleFavorite,
+  onSelect,
 }) {
   const sentinelRef = useRef(null);
 
@@ -54,6 +55,7 @@ export function PokemonList({
             pokemon={p}
             isFavorite={favorites.includes(p.id)}
             onToggleFavorite={onToggleFavorite}
+            onSelect={onSelect}
           />
         ))}
         {loading && pokemon.length === 0 &&

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SearchBar } from './components/SearchBar';
 import { PokemonList } from './components/PokemonList';
 import { FavoritesList } from './components/FavoritesList';
+import { PokemonDetail } from './components/PokemonDetail';
 import { useFavorites } from './hooks/useFavorites';
 import { usePokemonList } from './hooks/usePokemonList';
 import { usePokemonSearch } from './hooks/usePokemonSearch';
@@ -12,6 +13,7 @@ export default function App() {
   const [view, setView] = useState('home');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
 
   const { favorites, toggleFavorite } = useFavorites();
   const { types } = useTypes();
@@ -39,13 +41,15 @@ export default function App() {
   const displayError = isSearching ? searchError : listError;
   const displayHasMore = isSearching ? false : hasMore;
   const displayRetry = isSearching ? () => {} : listRetry;
-
   const resultCount = isSearching ? searchTotal : displayPokemon.length;
 
   const handleTypeFilter = (type) => {
     setSearch('');
     setTypeFilter(type);
   };
+
+  const handleSelect = useCallback((id) => setSelectedId(id), []);
+  const handleClose = useCallback(() => setSelectedId(null), []);
 
   return (
     <div className={styles.app}>
@@ -98,6 +102,7 @@ export default function App() {
               onRetry={displayRetry}
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
+              onSelect={handleSelect}
             />
           </>
         ) : (
@@ -106,10 +111,20 @@ export default function App() {
             <FavoritesList
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
+              onSelect={handleSelect}
             />
           </>
         )}
       </main>
+
+      {selectedId !== null && (
+        <PokemonDetail
+          id={selectedId}
+          isFavorite={favorites.includes(selectedId)}
+          onToggleFavorite={toggleFavorite}
+          onClose={handleClose}
+        />
+      )}
     </div>
   );
 }

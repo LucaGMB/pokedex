@@ -26,7 +26,7 @@ function reducer(state, action) {
   }
 }
 
-export function FavoritesList({ favorites, onToggleFavorite }) {
+export function FavoritesList({ favorites, onToggleFavorite, onSelect }) {
   const [{ pokemon, loading, error }, dispatch] = useReducer(reducer, initial);
 
   useEffect(() => {
@@ -71,6 +71,7 @@ export function FavoritesList({ favorites, onToggleFavorite }) {
           pokemon={p}
           isFavorite={true}
           onToggleFavorite={onToggleFavorite}
+          onSelect={onSelect}
         />
       ))}
     </div>
